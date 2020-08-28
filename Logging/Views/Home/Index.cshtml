@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+@using (Html.BeginForm("Create", "Home", FormMethod.Post))
+{
+    <input type="hidden" value="@ViewBag.BookId" name="BookId" />
+    <table>
+        <tr>
+            <td>
+                <p>Введите имя таблицы</p>
+            </td>
+            <td>
+                <input type="text" name="Name" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Create" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+}
