@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Serilog.Formatting.Compact;
 
 namespace Logging
 {
@@ -48,7 +49,7 @@ namespace Logging
             catch (Exception ex)
             {
                 _logger.LogTrace("HomeController Line 49");
-                _logger.LogError($"Table with name {name} didn't create {ex}");
+                _logger.LogError(ex, $"Table with name {name} didn't create");
             }
 
             return View("Index");
