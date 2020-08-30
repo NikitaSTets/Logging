@@ -31,24 +31,24 @@ namespace Logging
         [HttpPost]
         public IActionResult Create(string name)
         {
+            _logger.LogTrace("HomeController Line 34");
             try
             {
                 var isDatabaseAvailable = _databaseService.CheckIfDatabaseAvailable();
+                _logger.LogTrace("HomeController Line 38");
                 if (isDatabaseAvailable)
                 {
+                    _logger.LogTrace("HomeController Line 41");
                     _tableManagementService.Create(name);
+
+                    _exceptionService.ThrowException();
+                    _logger.LogInformation("Table with name {0} successfully created ", name);
                 }
             }
             catch (Exception ex)
             {
-                //strack trace didn't log
-                _logger.LogError("Exception thrown when trying to convert customer viewmodel to model or getting data from the database with id: " + 1231312, ex);
-
-                //strack trace logged
-                _logger.LogError($"An error accured: {ex}.");
-
-                //strack trace logged
-                _logger.LogError(ex, $"An error accured");
+                _logger.LogTrace("HomeController Line 49");
+                _logger.LogError($"Table with name {name} didn't create {ex}");
             }
 
             return View("Index");

@@ -6,7 +6,13 @@ namespace Logging
     {
         public void ThrowException()
         {
-            throw new Exception("LoOL", new ArgumentOutOfRangeException());
+            var rand = new Random();
+            var randomValue = rand.Next(1, 100);
+
+            if (randomValue > 20)
+            {
+                throw new Exception("LoOL", new ArgumentOutOfRangeException());
+            }
         }
     }
 }

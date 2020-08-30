@@ -1,1 +1,0 @@
-User profile is available. Using '"C:\Users\Nick\AppData\Local\ASP.NET\DataProtection-Keys"' as key repository and Windows DPAPI to encrypt keys at rest.
