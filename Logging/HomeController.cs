@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using Serilog.Formatting.Compact;
 
 namespace Logging
@@ -32,25 +36,47 @@ namespace Logging
         [HttpPost]
         public IActionResult Create(string name)
         {
-            _logger.LogTrace("HomeController Line 34");
+            _logger.LogTrace("Before executing Create table with Name = {name}", name);
             try
             {
                 var isDatabaseAvailable = _databaseService.CheckIfDatabaseAvailable();
-                _logger.LogTrace("HomeController Line 38");
                 if (isDatabaseAvailable)
                 {
-                    _logger.LogTrace("HomeController Line 41");
-                    _tableManagementService.Create(name);
+                    _logger.LogDebug("Database is available");
+
+                    var tableDate = new DateTime(2000, 12, 12, 12, 12, 12, DateTimeKind.Utc);
+                    _logger.LogTrace("Before Creating table object with name={name} and date = {tableDate}", name, tableDate);
+
+                    var table = new Table
+                    {
+                        Name = name, 
+                        Date = tableDate
+                    };
+
+                    _logger.LogTrace("After Creating table object with name={name} and date = {tableDate}", name, tableDate);
+
+                    _logger.LogTrace("Before serializing table object");
+
+                    var serializeObject = JsonConvert.SerializeObject(table, new JsonSerializerSettings {Converters = { new JavaScriptDateTimeConverter() } });
+
+                    _logger.LogTrace("after serializing table object");
+
+                    _tableManagementService.Create(serializeObject);
 
                     _exceptionService.ThrowException();
-                    _logger.LogInformation("Table with name {0} successfully created ", name);
+                    _logger.LogInformation("Table {name} successfully created ", name);
+                }
+                else
+                {
+                    _logger.LogDebug("Database is not available");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogTrace("HomeController Line 49");
-                _logger.LogError(ex, $"Table with name {name} didn't create");
+                _logger.LogError(ex, "Table {name} failed to create", name);
             }
+
+            _logger.LogTrace("After executing Create");
 
             return View("Index");
         }
