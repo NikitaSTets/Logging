@@ -22,13 +22,13 @@ namespace Logging
             {
                 _exceptionService.ThrowException();
 
+                _logger.LogDebug("Attempt to check if Database is available successfully");
+
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                _logger.LogWarning($"Failed attempt to check if Database is available: {e}");
-
-                _logger.LogDebug("Internet connection problems");
+                _logger.LogWarning(ex, "Failed attempt to check if Database is available:");
             }
 
             return false;

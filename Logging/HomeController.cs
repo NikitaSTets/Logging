@@ -36,24 +36,24 @@ namespace Logging
         [HttpPost]
         public IActionResult Create(string name)
         {
-            _logger.LogTrace("Before executing Create table with Name = {name}", name);
+            _logger.LogInformation("Creating table with Name = {name}", name);
+
             try
             {
                 var isDatabaseAvailable = _databaseService.CheckIfDatabaseAvailable();
                 if (isDatabaseAvailable)
                 {
-                    _logger.LogDebug("Database is available");
+                    _logger.LogInformation("Database is available");
 
                     var tableDate = new DateTime(2000, 12, 12, 12, 12, 12, DateTimeKind.Utc);
-                    _logger.LogTrace("Before Creating table object with name={name} and date = {tableDate}", name, tableDate);
-
+                    
                     var table = new Table
                     {
                         Name = name, 
                         Date = tableDate
                     };
 
-                    _logger.LogTrace("After Creating table object with name={name} and date = {tableDate}", name, tableDate);
+                    _logger.LogDebug("Table object successfully initialized with name={name} and date = {tableDate}", name, tableDate);
 
                     _logger.LogTrace("Before serializing table object");
 
@@ -64,19 +64,17 @@ namespace Logging
                     _tableManagementService.Create(serializeObject);
 
                     _exceptionService.ThrowException();
-                    _logger.LogInformation("Table {name} successfully created ", name);
+                    _logger.LogInformation("Table {name} successfully created in Database", name);
                 }
                 else
                 {
-                    _logger.LogDebug("Database is not available");
+                    _logger.LogWarning("Database is not available");
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Table {name} failed to create", name);
             }
-
-            _logger.LogTrace("After executing Create");
 
             return View("Index");
         }
