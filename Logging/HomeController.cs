@@ -43,7 +43,7 @@ namespace Logging
                 var isDatabaseAvailable = _databaseService.CheckIfDatabaseAvailable();
                 if (isDatabaseAvailable)
                 {
-                    _logger.LogInformation("Database is available");
+                    _logger.LogDebug("Database is available");
 
                     var tableDate = new DateTime(2000, 12, 12, 12, 12, 12, DateTimeKind.Utc);
                     
